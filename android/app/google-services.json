@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "20604819213",
+    "project_id": "cinemax-460cb",
+    "storage_bucket": "cinemax-460cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20604819213:android:a653ad3a0eba364fb4c244",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20604819213-2fhaciphkg7e9apdn94e14r9l2dsnbhm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_application_1",
+            "certificate_hash": "567db43f60db2d57a108f6a9edf9b1b1033f6389"
+          }
+        },
+        {
+          "client_id": "20604819213-h6pi6npuapo0i65bq57qi6itb9cl7fun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOKFANqXiavEWfDI2ORsRKmqCOM6h2ZZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20604819213-h6pi6npuapo0i65bq57qi6itb9cl7fun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
