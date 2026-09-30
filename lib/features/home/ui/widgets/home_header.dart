@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/themes/app_colors.dart';
+import '../../../../core/themes/app_colors.dart';
 import '../../data/models/user_model.dart';
 
 class HomeHeader extends StatelessWidget {
   final UserModel user;
-  const HomeHeader({super.key, required this.user});
+  final VoidCallback? onFavoriteTap;
+  const HomeHeader({super.key, required this.user, this.onFavoriteTap});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class HomeHeader extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        const SizedBox(width: 16), // left 80 - (24 + 40) = 16
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,11 +47,15 @@ class HomeHeader extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(color: AppColors.surface, shape: BoxShape.circle),
-          child: const Icon(Icons.favorite, color: AppColors.red, size: 20),
+        GestureDetector(
+          onTap: onFavoriteTap,
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+                color: AppColors.surface, shape: BoxShape.circle),
+            child: const Icon(Icons.favorite, color: AppColors.red, size: 20),
+          ),
         ),
       ],
     );

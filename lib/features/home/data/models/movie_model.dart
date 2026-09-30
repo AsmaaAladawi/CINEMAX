@@ -33,7 +33,6 @@ class MovieModel {
   String get posterUrl => '${ApiConstants.imageBase}/w500$posterPath';
   String get backdropUrl => '${ApiConstants.imageBase}/w780${backdropPath ?? posterPath}';
 
-  /// "2022-03-02" -> "On March 2, 2022"
   String get formattedDate {
     final p = releaseDate.split('-');
     if (p.length != 3) return '';

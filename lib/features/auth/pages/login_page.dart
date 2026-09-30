@@ -1,4 +1,11 @@
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/networking/api_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_1/features/home/data/repos/home_repo.dart';
+import 'package:flutter_application_1/features/home/logic/home_cubit.dart';
+import 'package:flutter_application_1/features/home/ui/pages/home_page.dart';
 import '../services/auth_service.dart';
 import '../widgets/auth_app_bar.dart';
 import '../widgets/custom_text_field.dart';
@@ -17,35 +24,76 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final _authService = AuthService();
 
+  StreamSubscription<User?>? _authSub;
+  bool _navigated = false;
   bool _obscurePassword = true;
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // أول ما Firebase يقول في يوزر مسجّل، نروح للهوم
+    _authSub = FirebaseAuth.instance.authStateChanges().listen((user) {
+      debugPrint('authStateChanges: ${user?.email}');
+      if (user != null) _goHome();
+    });
+  }
+
+  void _goHome() {
+    if (_navigated || !mounted) return;
+    _navigated = true;
+    debugPrint('navigating to home');
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => HomeCubit(HomeRepo(ApiService()))..loadHome(),
+          child: const HomePage(),
+        ),
+      ),
+      (route) => false,
+    );
+  }
+
   Future<void> _handleLogin() async {
+    FocusScope.of(context).unfocus();
     setState(() => _isLoading = true);
 
-    final error = await _authService.login(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-
-    setState(() => _isLoading = false);
+    String? error;
+    try {
+      error = await _authService
+          .login(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          )
+          .timeout(const Duration(seconds: 15));
+      debugPrint('login result: $error');
+    } catch (e) {
+      debugPrint('login exception: $e');
+      // لو Firebase سجّل الدخول فعلًا رغم الـ exception، كمّلي للهوم
+      if (FirebaseAuth.instance.currentUser != null) {
+        _goHome();
+        return;
+      }
+      error = e.toString();
+    }
 
     if (!mounted) return;
+    setState(() => _isLoading = false);
 
     if (error != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error), backgroundColor: Colors.red),
       );
-    } else {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const HomePage()),
-      // );
+      return;
     }
+
+    _goHome();
   }
 
   @override
   void dispose() {
+    _authSub?.cancel();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

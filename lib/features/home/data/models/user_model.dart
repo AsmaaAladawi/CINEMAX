@@ -24,7 +24,6 @@ class UserModel {
         gravatarHash: json['avatar']?['gravatar']?['hash'],
       );
 
-  /// لو مفيش صورة من TMDB بنستخدم Gravatar
   String get avatarUrl => avatarPath != null
       ? '${ApiConstants.imageBase}/w200$avatarPath'
       : 'https://www.gravatar.com/avatar/$gravatarHash?s=200&d=identicon';

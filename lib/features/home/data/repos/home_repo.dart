@@ -22,7 +22,6 @@ class HomeRepo {
     return (json['genres'] as List).map((e) => GenreModel.fromJson(e)).toList();
   }
 
-  /// genreId = 0 يعني "All"
   Future<List<MovieModel>> getPopular({int genreId = 0}) async {
     final json = genreId == 0
         ? await _api.get(ApiConstants.popular)

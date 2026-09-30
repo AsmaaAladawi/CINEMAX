@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/themes/app_colors.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../../movie_detail/ui/pages/movie_detail_page.dart';
 import '../../data/models/movie_model.dart';
 
 class MovieBannerCarousel extends StatefulWidget {
@@ -35,7 +36,13 @@ class _MovieBannerCarouselState extends State<MovieBannerCarousel> {
             itemBuilder: (_, i) => AnimatedOpacity(
               duration: const Duration(milliseconds: 300),
               opacity: i == _current ? 1 : 0.32, // الصور الجانبية باهتة
-              child: _BannerItem(movie: movies[i]),
+              child: GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MovieDetailPage.route(movies[i].id),
+                ),
+                child: _BannerItem(movie: movies[i]),
+              ),
             ),
           ),
         ),

@@ -9,7 +9,6 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadHome() async {
     emit(HomeLoading());
     try {
-      // كل الطلبات بتتنفذ مع بعض
       final user = _repo.getUser();
       final banners = _repo.getUpcoming();
       final genres = _repo.getGenres();

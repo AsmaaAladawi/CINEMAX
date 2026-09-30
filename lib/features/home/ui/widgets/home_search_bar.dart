@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/themes/app_colors.dart';
 
-/// في الهوم هو مجرد زرار شكله سيرش، لما تدوسي عليه تروحي لصفحة السيرش
 class HomeSearchBar extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onFilterTap;

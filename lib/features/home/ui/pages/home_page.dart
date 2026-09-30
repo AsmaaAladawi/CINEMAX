@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/themes/app_colors.dart';
+import 'package:flutter_application_1/features/home/ui/pages/search_page.dart';
+import 'package:flutter_application_1/features/most_popular/pages/most_popular_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/navigation/bottom_nav_handler.dart';
+import '../../../../core/themes/app_colors.dart';
 import '../../../../core/widgets/app_bottom_nav.dart';
+import '../../../wishlist/ui/pages/wishlist_page.dart';
 import '../../logic/home_cubit.dart';
 import '../../logic/home_state.dart';
 import '../widgets/categories_list.dart';
@@ -17,7 +21,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      bottomNavigationBar: AppBottomNav(currentIndex: 0, onTap: (_) {}),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 0,
+        onTap: (i) => handleBottomNav(context, current: 0, index: i),
+      ),
       body: SafeArea(
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) => switch (state) {
@@ -57,12 +64,17 @@ class _Content extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: HomeHeader(user: state.user),
+          child: HomeHeader(
+            user: state.user,
+            onFavoriteTap: () => Navigator.push(context, WishlistPage.route()),
+          ),
         ),
         const SizedBox(height: 32),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: HomeSearchBar(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: HomeSearchBar(
+            onTap: () => Navigator.push(context, SearchPage.route()),
+          ),
         ),
         const SizedBox(height: 24),
         MovieBannerCarousel(movies: state.banners),
@@ -85,7 +97,7 @@ class _Content extends StatelessWidget {
             children: [
               const Text('Most popular', style: title),
               GestureDetector(
-                onTap: () {},
+                onTap: () => Navigator.push(context, MostPopularPage.route()),
                 child: const Text('See All',
                     style: TextStyle(
                         color: AppColors.accent, fontSize: 12, fontWeight: FontWeight.w500)),
