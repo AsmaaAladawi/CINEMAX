@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../data/models/genre_model.dart';
-import '../data/models/movie_model.dart';
+import '../../search/data/movie_model.dart';
 import '../data/models/user_model.dart';
 
 sealed class HomeState extends Equatable {

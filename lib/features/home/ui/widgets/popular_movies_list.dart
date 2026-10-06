@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/genre_model.dart';
-import '../../data/models/movie_model.dart';
+import '../../../search/data/movie_model.dart';
 import 'movie_card.dart';
 
 class PopularMoviesList extends StatelessWidget {

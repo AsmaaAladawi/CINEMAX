@@ -19,5 +19,5 @@ class ApiService {
   }) async {
     final response = await _dio.get(endpoint, queryParameters: query);
     return response.data as Map<String, dynamic>;
-  }
+  } 
 }

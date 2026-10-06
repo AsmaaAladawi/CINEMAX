@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../movie_detail/ui/pages/movie_detail_page.dart';
-import '../../data/models/movie_model.dart';
+import '../../../search/data/movie_model.dart';
 
 class MovieBannerCarousel extends StatefulWidget {
   final List<MovieModel> movies;

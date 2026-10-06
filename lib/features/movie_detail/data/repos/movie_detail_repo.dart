@@ -1,6 +1,6 @@
 import 'package:flutter_application_1/core/networking/api_constants.dart';
 import 'package:flutter_application_1/core/networking/api_service.dart';
-import 'package:flutter_application_1/features/home/data/models/actor_model.dart';
+import 'package:flutter_application_1/features/search/data/actor_model.dart';
 
 import '../models/movie_detail_model.dart';
 

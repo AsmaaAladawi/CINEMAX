@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/networking/api_service.dart';
 import 'package:flutter_application_1/features/home/data/models/genre_model.dart';
-import 'package:flutter_application_1/features/home/data/models/movie_model.dart';
+import 'package:flutter_application_1/features/search/data/movie_model.dart';
 import 'package:flutter_application_1/features/home/data/repos/home_repo.dart';
-import 'package:flutter_application_1/features/home/ui/widgets/search_movie_item.dart';
+import 'package:flutter_application_1/features/search/ui/search_movie_item.dart';
 import 'package:flutter_application_1/features/most_popular/logic/most_popular_cubit.dart';
 import 'package:flutter_application_1/features/most_popular/logic/most_popular_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/themes/app_colors.dart';
-import '../../../home/data/models/movie_model.dart';
-import '../../../movie_detail/ui/pages/movie_detail_page.dart';
+import '../../../core/themes/app_colors.dart';
+import '../data/movie_model.dart';
+import '../../movie_detail/ui/pages/movie_detail_page.dart';
 
 class SearchMovieItem extends StatelessWidget {
   final MovieModel movie;

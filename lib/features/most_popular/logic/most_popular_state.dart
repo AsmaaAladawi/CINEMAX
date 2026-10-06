@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../home/data/models/genre_model.dart';
-import '../../home/data/models/movie_model.dart';
+import '../../search/data/movie_model.dart';
 
 sealed class MostPopularState extends Equatable {
   @override
