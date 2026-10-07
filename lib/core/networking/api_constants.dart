@@ -20,6 +20,9 @@ static const accountId = 'b29b616c4fcaff2429ed8ee0e9cd6d13';
     // Movie detail
   static String movieDetails(int id) => '/movie/$id';
   static String movieCredits(int id) => '/movie/$id/credits';
+
+  static const languages = '/configuration/languages';
+  static const countries = '/configuration/countries';
 }
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/features/search/ui/search_page.dart';
+import 'package:flutter_application_1/features/search/ui/page/search_page.dart';
 import '../../features/wishlist/ui/pages/wishlist_page.dart';
 
 void handleBottomNav(

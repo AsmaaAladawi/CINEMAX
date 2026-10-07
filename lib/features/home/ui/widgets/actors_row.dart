@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/themes/app_colors.dart';
-import '../../../search/data/actor_model.dart';
+import '../../../search/data/model/actor_model.dart';
 
 class ActorsRow extends StatelessWidget {
   final List<ActorModel> actors;

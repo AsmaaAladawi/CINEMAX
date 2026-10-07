@@ -2,7 +2,7 @@ import 'package:flutter_application_1/core/networking/api_constants.dart';
 import 'package:flutter_application_1/core/networking/api_service.dart';
 
 import '../models/genre_model.dart';
-import '../../../search/data/movie_model.dart';
+import '../../../search/data/model/movie_model.dart';
 import '../models/user_model.dart';
 
 class HomeRepo {

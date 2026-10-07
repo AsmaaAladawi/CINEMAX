@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../movie_detail/ui/pages/movie_detail_page.dart';
 import '../../data/models/wishlist_item.dart';
@@ -62,7 +63,7 @@ class WishlistCard extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => WishlistCubit.instance.remove(item.id),
+              onTap: () => context.read<WishlistCubit>().remove(item.id),
               child: const Padding(
                 padding: EdgeInsets.all(4),
                 child: Icon(Icons.favorite, color: AppColors.red, size: 20),

@@ -1,9 +1,9 @@
 import 'package:flutter_application_1/core/networking/api_constants.dart';
 import 'package:flutter_application_1/core/networking/api_service.dart';
 
-import '../../home/data/models/genre_model.dart';
-import 'movie_model.dart';
-import 'actor_model.dart';
+import '../../../home/data/models/genre_model.dart';
+import '../model/movie_model.dart';
+import '../model/actor_model.dart';
 
 class SearchRepo {
   final ApiService _api;

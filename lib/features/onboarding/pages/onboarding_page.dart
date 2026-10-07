@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/features/onboarding/onboarding_content.dart';
-import 'package:flutter_application_1/features/onboarding/onboarding_model.dart';
+import 'package:flutter_application_1/features/onboarding/model/onboarding_content.dart';
+import 'package:flutter_application_1/features/onboarding/model/onboarding_model.dart';
 import '../widgets/onboarding_indicator.dart';
-import 'package:flutter_application_1/features/auth/pages/get_started_page.dart'; // ⬅️ جديد
+import 'package:flutter_application_1/features/auth/getstart/get_started_page.dart'; // ⬅️ جديد
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});

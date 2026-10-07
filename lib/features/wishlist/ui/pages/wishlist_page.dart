@@ -6,6 +6,7 @@ import '../../../../core/widgets/page_header.dart';
 import '../../../movie_detail/ui/pages/movie_detail_page.dart';
 import '../../data/models/wishlist_item.dart';
 import '../../logic/wishlist_cubit.dart';
+import '../../logic/wishlist_state.dart';
 
 class WishlistPage extends StatelessWidget {
   const WishlistPage({super.key});
@@ -21,15 +22,18 @@ class WishlistPage extends StatelessWidget {
           children: [
             const PageHeader(title: 'Wishlist'),
             Expanded(
-              child: BlocBuilder<WishlistCubit, List<WishlistItem>>(
-                bloc: WishlistCubit.instance,
-                builder: (context, items) {
-                  if (items.isEmpty) return const _EmptyView();
+              child: BlocBuilder<WishlistCubit, WishlistState>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const Center(
+                        child: CircularProgressIndicator(color: AppColors.accent));
+                  }
+                  if (state.items.isEmpty) return const _EmptyView();
                   return ListView.separated(
                     padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
-                    itemCount: items.length,
+                    itemCount: state.items.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (_, i) => _WishlistCard(item: items[i]),
+                    itemBuilder: (_, i) => _WishlistCard(item: state.items[i]),
                   );
                 },
               ),
@@ -98,7 +102,7 @@ class _WishlistCard extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => WishlistCubit.instance.remove(item.id),
+              onTap: () => context.read<WishlistCubit>().remove(item.id),
               child: const Padding(
                 padding: EdgeInsets.all(4),
                 child: Icon(Icons.favorite, color: AppColors.red, size: 20),

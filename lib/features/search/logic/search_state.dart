@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import '../../home/data/models/genre_model.dart';
-import '../data/movie_model.dart';
-import '../data/actor_model.dart';
+import '../data/model/movie_model.dart';
+import '../data/model/actor_model.dart';
 
 sealed class SearchState extends Equatable {
   @override

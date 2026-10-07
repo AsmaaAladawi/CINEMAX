@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/networking/api_service.dart';
+import 'package:flutter_application_1/core/di/injection.dart';
 import 'package:flutter_application_1/features/home/ui/widgets/actors_row.dart';
 import 'package:flutter_application_1/features/movie_detail/logic/movie_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +10,7 @@ import '../../../../core/widgets/app_bottom_nav.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../wishlist/data/models/wishlist_item.dart';
 import '../../../wishlist/logic/wishlist_cubit.dart';
-import '../../data/repos/movie_detail_repo.dart';
+import '../../../wishlist/logic/wishlist_state.dart';
 import '../../logic/movie_detail_cubit.dart';
 import '../widgets/share_sheet.dart';
 
@@ -20,8 +20,7 @@ class MovieDetailPage extends StatelessWidget {
 
   static Route route(int movieId) => MaterialPageRoute(
         builder: (_) => BlocProvider(
-          create: (_) =>
-              MovieDetailCubit(MovieDetailRepo(ApiService()))..load(movieId),
+          create: (_) => sl<MovieDetailCubit>()..load(movieId),
           child: MovieDetailPage(movieId: movieId),
         ),
       );
@@ -86,13 +85,13 @@ class _Content extends StatelessWidget {
       children: [
         PageHeader(
           title: d.title,
-          trailing: BlocBuilder<WishlistCubit, List<WishlistItem>>(
-            bloc: WishlistCubit.instance,
-            builder: (_, items) {
-              final fav = items.any((e) => e.id == d.id);
+          trailing: BlocBuilder<WishlistCubit, WishlistState>(
+            builder: (context, wishlist) {
+              final fav = wishlist.contains(d.id);
               return GestureDetector(
-                onTap: () =>
-                    WishlistCubit.instance.toggle(WishlistItem.fromDetail(d)),
+                onTap: () => context
+                    .read<WishlistCubit>()
+                    .toggle(WishlistItem.fromDetail(d)),
                 child: Icon(
                   fav ? Icons.favorite : Icons.favorite_border,
                   color: AppColors.red,

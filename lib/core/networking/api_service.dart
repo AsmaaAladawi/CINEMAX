@@ -20,4 +20,9 @@ class ApiService {
     final response = await _dio.get(endpoint, queryParameters: query);
     return response.data as Map<String, dynamic>;
   } 
+
+    Future<List<dynamic>> getList(String endpoint, {Map<String, dynamic>? query}) async {
+    final response = await _dio.get(endpoint, queryParameters: query);
+    return response.data as List<dynamic>;
+  }
 }

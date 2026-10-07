@@ -10,7 +10,7 @@ import '../services/auth_service.dart';
 import '../widgets/auth_app_bar.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/primary_button.dart';
-import 'reset_password_page.dart';
+import '../newpass/reset_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

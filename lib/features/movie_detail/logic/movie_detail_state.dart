@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_application_1/features/search/data/actor_model.dart';
+import 'package:flutter_application_1/features/search/data/model/actor_model.dart';
 import '../data/models/movie_detail_model.dart';
 
 sealed class MovieDetailState extends Equatable {

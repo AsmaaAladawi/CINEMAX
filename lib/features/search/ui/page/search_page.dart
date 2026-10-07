@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/networking/api_service.dart';
-import 'package:flutter_application_1/features/search/data/Searchrepo.dart';
+import 'package:flutter_application_1/core/di/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/navigation/bottom_nav_handler.dart';
-import '../../../core/themes/app_colors.dart';
-import '../../../core/widgets/app_bottom_nav.dart';
-import '../../home/data/models/genre_model.dart';
-import '../data/movie_model.dart';
-import '../../home/ui/widgets/popular_movies_list.dart';
-import '../logic/search_cubit.dart';
-import '../logic/search_state.dart';
-import '../../home/ui/widgets/actors_row.dart';
-import 'empty_search_view.dart';
-import 'search_field.dart';
-import 'search_movie_item.dart';
+import '../../../../core/navigation/bottom_nav_handler.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../../../core/widgets/app_bottom_nav.dart';
+import '../../../home/data/models/genre_model.dart';
+import '../../data/model/movie_model.dart';
+import '../../../home/ui/widgets/popular_movies_list.dart';
+import '../../logic/search_cubit.dart';
+import '../../logic/search_state.dart';
+import '../../../home/ui/widgets/actors_row.dart';
+import '../widget/empty_search_view.dart';
+import '../widget/search_field.dart';
+import '../widget/search_movie_item.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
   static Route route() => MaterialPageRoute(
         builder: (_) => BlocProvider(
-          create: (_) => SearchCubit(SearchRepo(ApiService()))..loadInitial(),
+          create: (_) => sl<SearchCubit>()..loadInitial(),
           child: const SearchPage(),
         ),
       );

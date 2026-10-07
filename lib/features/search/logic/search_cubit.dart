@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:flutter_application_1/features/search/data/Searchrepo.dart';
+import 'package:flutter_application_1/features/search/data/repo/Searchrepo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../home/data/models/genre_model.dart';
-import '../data/movie_model.dart';
-import '../data/actor_model.dart';
+import '../data/model/movie_model.dart';
+import '../data/model/actor_model.dart';
 import 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {

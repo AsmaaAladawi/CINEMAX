@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/features/search/ui/search_page.dart';
+import 'package:flutter_application_1/features/search/ui/page/search_page.dart';
 import 'package:flutter_application_1/features/most_popular/pages/most_popular_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/navigation/bottom_nav_handler.dart';
