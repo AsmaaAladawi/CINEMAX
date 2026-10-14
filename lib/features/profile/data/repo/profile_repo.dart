@@ -1,21 +1,21 @@
 import 'package:flutter/painting.dart';
-import 'package:flutter_application_1/core/networking/api_constants.dart';
 import 'package:flutter_application_1/core/networking/api_service.dart';
+import 'package:flutter_application_1/features/auth/data/repo/auth_repo.dart';
 import 'package:flutter_application_1/features/profile/data/model/profile_model.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_application_1/features/home/data/models/user_model.dart';
 
 class ProfileRepo {
   final ApiService _api;
-  ProfileRepo(this._api);
+  final AuthRepo _auth;
+  ProfileRepo(this._api, this._auth);
 
   static const _kName = 'profile_name';
   static const _kEmail = 'profile_email';
   static const _kPhone = 'profile_phone';
 
   Future<ProfileModel> getProfile() async {
-    final user = UserModel.fromJson(await _api.get(ApiConstants.account));
+    final user = await _api.getUser();
     final prefs = await SharedPreferences.getInstance();
     return ProfileModel(
       name: prefs.getString(_kName) ?? user.name,
@@ -43,6 +43,6 @@ class ProfileRepo {
     await prefs.remove(_kName);
     await prefs.remove(_kEmail);
     await prefs.remove(_kPhone);
-    //await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
   }
 }

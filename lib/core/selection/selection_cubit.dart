@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_application_1/core/selection/option_model.dart';
+import 'package:flutter_application_1/core/navigation/option_model.dart';
 import 'package:flutter_application_1/core/selection/selection_state.dart';
 
 class SelectionCubit extends Cubit<SelectionState> {

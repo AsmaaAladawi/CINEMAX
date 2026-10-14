@@ -1,99 +1,47 @@
-import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/networking/api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_application_1/features/home/data/repos/home_repo.dart';
-import 'package:flutter_application_1/features/home/logic/home_cubit.dart';
-import 'package:flutter_application_1/features/home/ui/pages/home_page.dart';
-import '../services/auth_service.dart';
+import 'package:flutter_application_1/core/di/injection.dart';
+import 'package:flutter_application_1/core/themes/app_colors.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_cubit.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_state.dart';
+import '../newpass/reset_password_page.dart';
 import '../widgets/auth_app_bar.dart';
+import '../widgets/auth_listener.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/primary_button.dart';
-import '../newpass/reset_password_page.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  Widget build(BuildContext context) => BlocProvider(
+        create: (_) => sl<AuthCubit>(),
+        child: const AuthListener(child: _LoginView()),
+      );
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _authService = AuthService();
-
-  StreamSubscription<User?>? _authSub;
-  bool _navigated = false;
-  bool _obscurePassword = true;
-  bool _isLoading = false;
+class _LoginView extends StatefulWidget {
+  const _LoginView();
 
   @override
-  void initState() {
-    super.initState();
-    // أول ما Firebase يقول في يوزر مسجّل، نروح للهوم
-    _authSub = FirebaseAuth.instance.authStateChanges().listen((user) {
-      debugPrint('authStateChanges: ${user?.email}');
-      if (user != null) _goHome();
-    });
-  }
+  State<_LoginView> createState() => _LoginViewState();
+}
 
-  void _goHome() {
-    if (_navigated || !mounted) return;
-    _navigated = true;
-    debugPrint('navigating to home');
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) => HomeCubit(HomeRepo(ApiService()))..loadHome(),
-          child: const HomePage(),
-        ),
-      ),
-      (route) => false,
-    );
-  }
+class _LoginViewState extends State<_LoginView> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
-  Future<void> _handleLogin() async {
+  void _submit() {
     FocusScope.of(context).unfocus();
-    setState(() => _isLoading = true);
-
-    String? error;
-    try {
-      error = await _authService
-          .login(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          )
-          .timeout(const Duration(seconds: 15));
-      debugPrint('login result: $error');
-    } catch (e) {
-      debugPrint('login exception: $e');
-      // لو Firebase سجّل الدخول فعلًا رغم الـ exception، كمّلي للهوم
-      if (FirebaseAuth.instance.currentUser != null) {
-        _goHome();
-        return;
-      }
-      error = e.toString();
-    }
-
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-
-    if (error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error), backgroundColor: Colors.red),
-      );
-      return;
-    }
-
-    _goHome();
+    context.read<AuthCubit>().login(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
   }
 
   @override
   void dispose() {
-    _authSub?.cancel();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -102,9 +50,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isLoading = context.select((AuthCubit c) => c.state is AuthLoading);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1F1D2B),
+      backgroundColor: AppColors.background,
       appBar: const AuthAppBar(title: 'Login'),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -114,9 +63,8 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 16),
               const Text(
-                'Hi, Tiffany',
+                'Welcome back',
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
                   fontSize: 24,
                   color: Colors.white,
@@ -124,61 +72,42 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 6),
               const Text(
-                'Welcome back! Please enter your details.',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13,
-                  color: Color(0xFF92929D),
-                ),
+                'Please enter your details.',
+                style: TextStyle(fontSize: 13, color: AppColors.grey),
               ),
               const SizedBox(height: 32),
-
               CustomTextField(
                 label: 'Email Address',
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-
               CustomTextField(
                 label: 'Password',
                 controller: _passwordController,
                 isPassword: true,
                 obscureText: _obscurePassword,
-                onToggleObscure: () {
-                  setState(() => _obscurePassword = !_obscurePassword);
-                },
+                onToggleObscure: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
               ),
-
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ResetPasswordPage(),
-                      ),
-                    );
-                  },
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
+                  ),
                   child: const Text(
                     'Forgot Password?',
-                    style: TextStyle(
-                      color: Color(0xFF12CDD9),
-                      fontFamily: 'Montserrat',
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: AppColors.accent, fontSize: 13),
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
-
               PrimaryButton(
                 label: 'Login',
-                isLoading: _isLoading,
-                onPressed: _handleLogin,
+                isLoading: isLoading,
+                onPressed: _submit,
               ),
-
               const SizedBox(height: 24),
             ],
           ),

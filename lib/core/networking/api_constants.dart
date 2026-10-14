@@ -2,8 +2,8 @@ class ApiConstants {
   static const baseUrl = 'https://api.themoviedb.org/3';
   static const imageBase = 'https://image.tmdb.org/t/p';
 
-static const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMjliNjE2YzRmY2FmZjI0MjllZDhlZTBlOWNkNmQxMyIsIm5iZiI6MTc5MDYwODI1OS43MzMsInN1YiI6IjZhYmE4MzgzYmQ0NDFkMmE5NmRkYzNiNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4DnhJeF4uTaXtsnoRG6WPacXKRDF7pDKVRRUN_LUxL0';
-static const accountId = 'b29b616c4fcaff2429ed8ee0e9cd6d13';
+  static const accessToken = String.fromEnvironment('TMDB_TOKEN');
+  static const accountId = String.fromEnvironment('TMDB_ACCOUNT_ID');
 
   // Home
   static const account = '/account/$accountId';
@@ -17,14 +17,11 @@ static const accountId = 'b29b616c4fcaff2429ed8ee0e9cd6d13';
   static const topRated = '/movie/top_rated';
   static const searchMovie = '/search/movie';
   static const searchPerson = '/search/person';
-    // Movie detail
+
+  // Movie detail
   static String movieDetails(int id) => '/movie/$id';
   static String movieCredits(int id) => '/movie/$id/credits';
 
   static const languages = '/configuration/languages';
   static const countries = '/configuration/countries';
 }
-
-
-  //static const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMjliNjE2YzRmY2FmZjI0MjllZDhlZTBlOWNkNmQxMyIsIm5iZiI6MTc5MDYwODI1OS43MzMsInN1YiI6IjZhYmE4MzgzYmQ0NDFkMmE5NmRkYzNiNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4DnhJeF4uTaXtsnoRG6WPacXKRDF7pDKVRRUN_LUxL0';
-  //static const accountId = 'b29b616c4fcaff2429ed8ee0e9cd6d13';

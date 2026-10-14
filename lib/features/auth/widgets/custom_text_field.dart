@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/themes/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
@@ -26,10 +27,9 @@ class CustomTextField extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Montserrat',
             fontWeight: FontWeight.w500,
             fontSize: 13,
-            color: Color(0xFF92929D),
+            color: AppColors.grey,
           ),
         ),
         const SizedBox(height: 6),
@@ -37,22 +37,22 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           obscureText: isPassword ? obscureText : false,
           keyboardType: keyboardType,
-          style: const TextStyle(color: Colors.white, fontFamily: 'Montserrat'),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             border: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF92929D)),
+              borderSide: BorderSide(color: AppColors.grey),
             ),
             enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF92929D)),
+              borderSide: BorderSide(color: AppColors.grey),
             ),
             focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF12CDD9)),
+              borderSide: BorderSide(color: AppColors.accent),
             ),
             suffixIcon: isPassword
                 ? IconButton(
                     icon: Icon(
                       obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: const Color(0xFF92929D),
+                      color: AppColors.grey,
                     ),
                     onPressed: onToggleObscure,
                   )

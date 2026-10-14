@@ -7,6 +7,11 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
+        <!-- إيقاف Impeller: بيسبب تجميد على بعض أجهزة MediaTek مع Vulkan -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableImpeller"
+            android:value="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -35,21 +40,17 @@
     </application>
 
     <queries>
-
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
-
         <intent>
             <action android:name="android.intent.action.VIEW"/>
             <data android:scheme="https"/>
         </intent>
-
         <package android:name="com.facebook.katana"/>
         <package android:name="com.facebook.orca"/>
         <package android:name="com.instagram.android"/>
-
     </queries>
 
 </manifest>

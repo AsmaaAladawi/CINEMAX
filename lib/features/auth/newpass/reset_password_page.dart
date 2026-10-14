@@ -1,45 +1,37 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_1/core/di/injection.dart';
+import 'package:flutter_application_1/core/themes/app_colors.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_cubit.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_state.dart';
 import '../widgets/auth_app_bar.dart';
+import '../widgets/auth_listener.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/primary_button.dart';
 
-class ResetPasswordPage extends StatefulWidget {
+class ResetPasswordPage extends StatelessWidget {
   const ResetPasswordPage({super.key});
 
   @override
-  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
+  Widget build(BuildContext context) => BlocProvider(
+        create: (_) => sl<AuthCubit>(),
+        child: const AuthListener(child: _ResetPasswordView()),
+      );
 }
 
-class _ResetPasswordPageState extends State<ResetPasswordPage> {
+class _ResetPasswordView extends StatefulWidget {
+  const _ResetPasswordView();
+
+  @override
+  State<_ResetPasswordView> createState() => _ResetPasswordViewState();
+}
+
+class _ResetPasswordViewState extends State<_ResetPasswordView> {
   final _emailController = TextEditingController();
-  final _authService = AuthService();
-  bool _isLoading = false;
 
-  Future<void> _handleNext() async {
-    setState(() => _isLoading = true);
-
-    final error = await _authService.sendPasswordReset(
-      email: _emailController.text,
-    );
-
-    setState(() => _isLoading = false);
-
-    if (!mounted) return;
-
-    if (error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error), backgroundColor: Colors.red),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم إرسال رابط استرجاع كلمة المرور لبريدك'),
-          backgroundColor: Color(0xFF12CDD9),
-        ),
-      );
-      Navigator.pop(context);
-    }
+  void _submit() {
+    FocusScope.of(context).unfocus();
+    context.read<AuthCubit>().sendPasswordReset(_emailController.text);
   }
 
   @override
@@ -51,9 +43,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isLoading = context.select((AuthCubit c) => c.state is AuthLoading);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1F1D2B),
+      backgroundColor: AppColors.background,
       appBar: const AuthAppBar(title: 'Reset Password'),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -65,7 +58,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               const Text(
                 'Reset Password',
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
                   fontSize: 24,
                   color: Colors.white,
@@ -74,26 +66,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               const SizedBox(height: 6),
               const Text(
                 'Recover your account password',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13,
-                  color: Color(0xFF92929D),
-                ),
+                style: TextStyle(fontSize: 13, color: AppColors.grey),
               ),
               const SizedBox(height: 32),
-
               CustomTextField(
                 label: 'Email Address',
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-
               const SizedBox(height: 8),
-
               PrimaryButton(
-                label: 'Next',
-                isLoading: _isLoading,
-                onPressed: _handleNext,
+                label: 'Send Reset Link',
+                isLoading: isLoading,
+                onPressed: _submit,
               ),
             ],
           ),

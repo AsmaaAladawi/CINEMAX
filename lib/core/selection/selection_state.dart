@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_application_1/core/selection/option_model.dart';
+import 'package:flutter_application_1/core/navigation/option_model.dart';
 
 sealed class SelectionState extends Equatable {
   @override

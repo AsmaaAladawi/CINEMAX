@@ -1,3 +1,5 @@
+import 'package:flutter_application_1/features/auth/data/repo/auth_repo.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_cubit.dart';
 import 'package:flutter_application_1/features/country/data/country_repo.dart';
 import 'package:flutter_application_1/features/country/logic/country_cubit.dart';
 import 'package:flutter_application_1/features/edit_profile/logic/edit_profile_cubit.dart';
@@ -25,6 +27,7 @@ final sl = GetIt.instance;
 
 Future<void> setupDI() async {
   _core();
+  _auth();
   _home();
   _mostPopular();
   _movieDetail();
@@ -35,11 +38,15 @@ Future<void> setupDI() async {
   _notifications();
   _language();
   _country();
-
 }
 
 void _core() {
   sl.registerLazySingleton<ApiService>(() => ApiService());
+}
+
+void _auth() {
+  sl.registerLazySingleton<AuthRepo>(() => AuthRepo());
+  sl.registerFactory<AuthCubit>(() => AuthCubit(sl()));
 }
 
 void _home() {
@@ -67,21 +74,21 @@ void _wishlist() {
 }
 
 void _profile() {
-  sl.registerLazySingleton<ProfileRepo>(() => ProfileRepo(sl()));
+  sl.registerLazySingleton<ProfileRepo>(() => ProfileRepo(sl(), sl()));
   sl.registerFactory<ProfileCubit>(() => ProfileCubit(sl()));
 }
- 
+
 void _editProfile() {
   sl.registerFactoryParam<EditProfileCubit, ProfileModel, void>(
     (profile, _) => EditProfileCubit(sl(), profile),
   );
 }
- 
+
 void _notifications() {
   sl.registerLazySingleton<NotificationsRepo>(() => NotificationsRepo());
   sl.registerFactory<NotificationsCubit>(() => NotificationsCubit(sl()));
 }
- 
+
 void _language() {
   sl.registerLazySingleton<LanguageRepo>(() => LanguageRepo(sl()));
   sl.registerFactory<LanguageCubit>(() => LanguageCubit(sl()));

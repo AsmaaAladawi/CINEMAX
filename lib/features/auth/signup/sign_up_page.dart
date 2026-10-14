@@ -1,65 +1,55 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_1/core/di/injection.dart';
+import 'package:flutter_application_1/core/themes/app_colors.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_cubit.dart';
+import 'package:flutter_application_1/features/auth/logic/auth_state.dart';
 import '../widgets/auth_app_bar.dart';
+import '../widgets/auth_listener.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/primary_button.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  Widget build(BuildContext context) => BlocProvider(
+        create: (_) => sl<AuthCubit>(),
+        child: const AuthListener(child: _SignUpView()),
+      );
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpView extends StatefulWidget {
+  const _SignUpView();
+
+  @override
+  State<_SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<_SignUpView> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _authService = AuthService();
 
   bool _obscurePassword = true;
   bool _agreedToTerms = false;
-  bool _isLoading = false;
 
-  Future<void> _handleSignUp() async {
+  void _submit() {
+    FocusScope.of(context).unfocus();
     if (!_agreedToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('من فضلك وافقي على الشروط والأحكام'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(
+          content: Text('Please accept the Terms and Privacy Policy'),
+          backgroundColor: AppColors.red,
+        ));
       return;
     }
-
-    setState(() => _isLoading = true);
-
-    final error = await _authService.signUp(
-      fullName: _nameController.text,
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-
-    setState(() => _isLoading = false);
-
-    if (!mounted) return;
-
-    if (error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error), backgroundColor: Colors.red),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم إنشاء الحساب بنجاح'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const HomePage()),
-      // );
-    }
+    context.read<AuthCubit>().signUp(
+          fullName: _nameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
   }
 
   @override
@@ -73,9 +63,10 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isLoading = context.select((AuthCubit c) => c.state is AuthLoading);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1F1D2B),
+      backgroundColor: AppColors.background,
       appBar: const AuthAppBar(title: 'Sign Up'),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -87,7 +78,6 @@ class _SignUpPageState extends State<SignUpPage> {
               const Text(
                 "Let's get started",
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w700,
                   fontSize: 24,
                   color: Colors.white,
@@ -96,62 +86,48 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 6),
               const Text(
                 'The latest movies and series are here',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13,
-                  color: Color(0xFF92929D),
-                ),
+                style: TextStyle(fontSize: 13, color: AppColors.grey),
               ),
               const SizedBox(height: 32),
-
               CustomTextField(label: 'Full Name', controller: _nameController),
-
               CustomTextField(
                 label: 'Email Address',
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-
               CustomTextField(
                 label: 'Password',
                 controller: _passwordController,
                 isPassword: true,
                 obscureText: _obscurePassword,
-                onToggleObscure: () {
-                  setState(() => _obscurePassword = !_obscurePassword);
-                },
+                onToggleObscure: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
               ),
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Checkbox(
                     value: _agreedToTerms,
-                    activeColor: const Color(0xFF12CDD9),
-                    onChanged: (value) {
-                      setState(() => _agreedToTerms = value ?? false);
-                    },
+                    activeColor: AppColors.accent,
+                    onChanged: (value) =>
+                        setState(() => _agreedToTerms = value ?? false),
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 14),
-                      child: RichText(
-                        text: const TextSpan(
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Color(0xFF92929D),
-                          ),
+                      padding: EdgeInsets.only(top: 14),
+                      child: Text.rich(
+                        TextSpan(
+                          style: TextStyle(fontSize: 12, color: AppColors.grey),
                           children: [
                             TextSpan(text: 'I agree to the '),
                             TextSpan(
                               text: 'Terms and Services',
-                              style: TextStyle(color: Color(0xFF12CDD9)),
+                              style: TextStyle(color: AppColors.accent),
                             ),
                             TextSpan(text: ' and '),
                             TextSpan(
                               text: 'Privacy Policy',
-                              style: TextStyle(color: Color(0xFF12CDD9)),
+                              style: TextStyle(color: AppColors.accent),
                             ),
                           ],
                         ),
@@ -160,15 +136,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 8),
-
               PrimaryButton(
                 label: 'Sign Up',
-                isLoading: _isLoading,
-                onPressed: _handleSignUp,
+                isLoading: isLoading,
+                onPressed: _submit,
               ),
-
               const SizedBox(height: 24),
             ],
           ),
