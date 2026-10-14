@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/features/profile/ui/page/profile_page.dart';
 import 'package:flutter_application_1/features/search/ui/page/search_page.dart';
 import '../../features/wishlist/ui/pages/wishlist_page.dart';
 
@@ -15,5 +16,7 @@ void handleBottomNav(
       Navigator.push(context, SearchPage.route());
     case 2:
       Navigator.push(context, WishlistPage.route());
+    case 3:
+       Navigator.push(context, ProfilePage.route());
   }
 }

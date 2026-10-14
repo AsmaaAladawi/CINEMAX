@@ -174,7 +174,7 @@ class _Content extends StatelessWidget {
               if (state.cast.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 const Text('Cast and Crew', style: sectionTitle),
-                const SizedBox(height: 12),
+                const SizedBox(height: 15),
                 ActorsRow(actors: state.cast),
               ],
             ],
