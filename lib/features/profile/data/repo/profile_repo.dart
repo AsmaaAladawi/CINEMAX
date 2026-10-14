@@ -17,9 +17,12 @@ class ProfileRepo {
   Future<ProfileModel> getProfile() async {
     final user = await _api.getUser();
     final prefs = await SharedPreferences.getInstance();
+    final fb = _auth.currentUser;
+    final fbName = fb?.displayName;
     return ProfileModel(
-      name: prefs.getString(_kName) ?? user.name,
-      email: prefs.getString(_kEmail) ?? '',
+      name: prefs.getString(_kName) ??
+          ((fbName != null && fbName.isNotEmpty) ? fbName : user.name),
+      email: prefs.getString(_kEmail) ?? fb?.email ?? '',
       phone: prefs.getString(_kPhone) ?? '',
       avatarUrl: user.avatarUrl,
     );
@@ -43,6 +46,7 @@ class ProfileRepo {
     await prefs.remove(_kName);
     await prefs.remove(_kEmail);
     await prefs.remove(_kPhone);
+    await clearCache();
     await _auth.signOut();
   }
 }
